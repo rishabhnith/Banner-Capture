@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Banner Capture</title>
+  <link rel="stylesheet" href="../ui/common.css">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="top">
+    <span class="logo"><i></i></span>
+    <div class="grow">
+      <h1>Banner Capture</h1>
+      <p class="small muted" id="schedule-line"></p>
+    </div>
+    <button class="icon-btn" id="open-settings" title="Settings">⚙</button>
+  </header>
+
+  <section class="list-head row">
+    <span class="label grow">Banners to capture</span>
+    <button class="btn ghost sm" id="select-all">All</button>
+    <button class="btn ghost sm" id="select-none">None</button>
+  </section>
+
+  <main id="sites" class="sites" aria-live="polite"></main>
+
+  <section class="actions">
+    <div class="row">
+      <button class="btn primary grow" id="capture-selected">Capture selected</button>
+      <button class="btn" id="capture-all" title="Capture every banner, ticked or not">Capture all</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+
+  <footer class="page" id="page-box"></footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

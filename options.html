@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banner Capture · Settings</title>
+  <link rel="stylesheet" href="../ui/common.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-inner">
+      <span class="logo"><i></i></span>
+      <div class="grow">
+        <h1>Banner Capture</h1>
+        <p class="small muted" id="run-pill">Ready</p>
+      </div>
+      <button class="btn" id="stop-run" hidden>Stop</button>
+      <button class="btn primary" id="run-selected">Capture selected</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card welcome hidden" id="welcome">
+      <div class="row">
+        <h2 class="grow">Welcome! Three steps to your first capture</h2>
+        <button class="icon-btn" id="welcome-close" title="Hide">✕</button>
+      </div>
+      <ol class="steps">
+        <li><b>Add a website</b> below (Boulanger, Fnac and Darty are already there).</li>
+        <li><b>Pick its banner:</b> click <i>Pick banner</i>, then click the banner on the page. Choose the whole carousel so every slide is captured.</li>
+        <li><b>Capture:</b> use the toolbar icon or the button at the top. Files go to your Downloads folder.</li>
+      </ol>
+      <div class="notice info">
+        If Chrome asks where to save <b>every</b> file, turn off <i>“Ask where to save each file before downloading”</i>.
+        <button class="btn sm" id="open-download-settings">Open Chrome download settings</button>
+      </div>
+    </section>
+
+    <section class="card" id="sites-card">
+      <div class="card-head">
+        <div class="grow">
+          <h2>Websites &amp; banners</h2>
+          <p class="muted small">Tick the banners you want in “Capture selected” and in the daily run.</p>
+        </div>
+      </div>
+      <form class="add-site" id="add-site" autocomplete="off">
+        <input type="url" id="add-url" placeholder="Website address, e.g. https://www.boulanger.com" required>
+        <input type="text" id="add-name" placeholder="Name (optional)" maxlength="60">
+        <button class="btn primary" type="submit">Add website</button>
+      </form>
+      <div id="add-msg" class="small"></div>
+      <div id="sites"></div>
+    </section>
+
+    <section class="card" id="schedule">
+      <div class="card-head">
+        <div class="grow">
+          <h2>Daily schedule</h2>
+          <p class="muted small">Captures the ticked banners once a day.</p>
+        </div>
+        <label class="switch" title="Turn the daily run on or off"><input type="checkbox" id="sch-enabled"><span></span></label>
+      </div>
+      <div class="fields">
+        <label class="field">
+          <span>Run every day at</span>
+          <input type="time" id="sch-time" step="60">
+        </label>
+        <p class="small" id="sch-next"></p>
+        <p class="small muted">Chrome needs to be open. If it is closed at that time, the run starts as soon as Chrome is opened again the same day.</p>
+      </div>
+    </section>
+
+    <section class="card" id="saving">
+      <div class="card-head"><h2 class="grow">Saving</h2></div>
+      <div class="fields">
+        <label class="field">
+          <span>Folder inside Downloads</span>
+          <input type="text" id="set-root" maxlength="40">
+        </label>
+        <p class="small muted" id="path-example"></p>
+
+        <fieldset class="field">
+          <legend>When an image was saved before</legend>
+          <label class="radio"><input type="radio" name="dup" value="day"> Save it again each day, once per day <span class="faint">(daily record)</span></label>
+          <label class="radio"><input type="radio" name="dup" value="ever"> Only save banners never saved before <span class="faint">(new banners only)</span></label>
+          <label class="radio"><input type="radio" name="dup" value="never"> Always save, even if it is a duplicate</label>
+        </fieldset>
+
+        <label class="field">
+          <span>Ignore images narrower than</span>
+          <span class="row"><input type="number" id="set-minw" min="0" max="5000" step="10" style="width:100px"> <span class="muted">pixels (skips arrows, icons and logos)</span></span>
+        </label>
+
+        <label class="field">
+          <span>CSV log separator</span>
+          <select id="set-sep">
+            <option value=",">Comma ,  (English Excel, Google Sheets, Python)</option>
+            <option value=";">Semicolon ;  (French Excel)</option>
+          </select>
+        </label>
+
+        <label class="check"><input type="checkbox" id="set-csv"> Save a CSV log for each run <span class="faint">(in the <code>_logs</code> folder)</span></label>
+        <label class="check"><input type="checkbox" id="set-notify"> Show a notification when a run finishes</label>
+        <label class="check"><input type="checkbox" id="set-bubble"> Hide Chrome’s download pop-up while capturing</label>
+
+        <details class="advanced">
+          <summary>Advanced</summary>
+          <label class="field">
+            <span>Websites captured at the same time</span>
+            <input type="number" id="set-parallel" min="1" max="5" style="width:100px">
+          </label>
+          <label class="field">
+            <span>Maximum wait for banners to appear (seconds)</span>
+            <input type="number" id="set-wait" min="2" max="60" style="width:100px">
+          </label>
+        </details>
+      </div>
+    </section>
+
+    <section class="card" id="last-run">
+      <div class="card-head">
+        <div class="grow">
+          <h2>Last run</h2>
+          <p class="muted small" id="last-run-when">No capture yet.</p>
+        </div>
+        <button class="btn sm" id="show-files">Show files</button>
+      </div>
+      <div id="last-run-body"></div>
+      <div class="row wrap foot">
+        <button class="btn sm" id="export-history">Download full history (CSV)</button>
+        <button class="btn sm danger" id="clear-history">Clear history</button>
+        <span class="small muted grow" id="history-count"></span>
+      </div>
+    </section>
+
+    <section class="card" id="backup">
+      <div class="card-head">
+        <div class="grow">
+          <h2>Share &amp; back up</h2>
+          <p class="muted small">Export your websites and banners to a file. Send it with the extension so a colleague gets the same setup, or keep it as a backup.</p>
+        </div>
+      </div>
+      <div class="row wrap">
+        <button class="btn" id="export-config">Export settings file</button>
+        <button class="btn" id="import-config">Import settings file…</button>
+        <input type="file" id="import-file" accept=".json,application/json" hidden>
+      </div>
+      <div id="import-box" class="import-box hidden"></div>
+    </section>
+
+    <p class="footer small faint" id="version"></p>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="options.js"></script>
+</body>
+</html>
